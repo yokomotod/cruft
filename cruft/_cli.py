@@ -38,8 +38,18 @@ def check(
             " commit is an ancestor of the project commit."
         ),
     ),
+    allowed_delay_days: Optional[int] = typer.Option(
+        None,
+        "--allowed-delay-days",
+        help=("TODO"),
+    ),
 ) -> None:
-    if not _commands.check(project_dir=project_dir, checkout=checkout, strict=strict):
+    if not _commands.check(
+        project_dir=project_dir,
+        checkout=checkout,
+        strict=strict,
+        allowed_delay_days=allowed_delay_days,
+    ):
         raise typer.Exit(1)
 
 

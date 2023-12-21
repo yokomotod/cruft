@@ -131,9 +131,40 @@ def test_check_not_strict(cruft_runner, cookiecutter_dir_updated):
     assert result.exit_code == 0
 
 
+def test_check_allowed_delay_days(cruft_runner, cookiecutter_dir):
+    result = cruft_runner(
+        [
+            "check",
+            "--project-dir",
+            cookiecutter_dir.as_posix(),
+            "--allowed-delay-days",
+            "1",
+            "--checkout",
+            "updated",
+        ]
+    )
+    assert result.exit_code == 0
+
+
 def test_check_stale(cruft_runner, cookiecutter_dir):
     result = cruft_runner(
         ["check", "--project-dir", cookiecutter_dir.as_posix(), "--checkout", "updated"]
+    )
+    assert result.exit_code == 1
+    assert "failure" in result.stdout.lower()
+
+
+def test_check_too_delayed(cruft_runner, cookiecutter_dir):
+    result = cruft_runner(
+        [
+            "check",
+            "--project-dir",
+            cookiecutter_dir.as_posix(),
+            "--allowed-delay-days",
+            "0",
+            "--checkout",
+            "updated",
+        ]
     )
     assert result.exit_code == 1
     assert "failure" in result.stdout.lower()

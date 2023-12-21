@@ -11,7 +11,10 @@ from .utils.iohelper import AltTemporaryDirectory
 
 @example()
 def check(
-    project_dir: Path = Path("."), checkout: Optional[str] = None, strict: bool = True
+    project_dir: Path = Path("."),
+    checkout: Optional[str] = None,
+    strict: bool = True,
+    allowed_delay_days: Optional[int] = None,
 ) -> bool:
     """Checks to see if there have been any updates to the Cookiecutter template
     used to generate this project."""
@@ -27,7 +30,9 @@ def check(
         ) as repo:
             last_commit = repo.head.object.hexsha
 
-            if utils.cruft.is_project_updated(repo, cruft_state["commit"], last_commit, strict):
+            if utils.cruft.is_project_updated(
+                repo, cruft_state["commit"], last_commit, strict, allowed_delay_days
+            ):
                 typer.secho(
                     "SUCCESS: Good work! Project's cruft is up to date "
                     "and as clean as possible :).",
