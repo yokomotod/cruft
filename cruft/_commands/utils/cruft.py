@@ -5,7 +5,7 @@ from typing import Any, Dict, Optional
 from git import Repo
 
 from cruft.exceptions import CruftAlreadyPresent, NoCruftFound
-from datetime import datetime
+from datetime import datetime, date
 
 CruftState = Dict[str, Any]
 
@@ -32,7 +32,6 @@ def is_project_updated(
     allowed_delay_days: Optional[int] = None,
 ) -> bool:
     latest_commit_date = datetime.fromtimestamp(repo.commit(latest_commit).committed_date).date()
-    current_commit_date = datetime.fromtimestamp(repo.commit(current_commit).committed_date).date()
 
     return (
         # If the latest commit exactly matches the current commit
@@ -46,7 +45,7 @@ def is_project_updated(
         or (
             allowed_delay_days is not None
             and repo.is_ancestor(repo.commit(current_commit), repo.commit(latest_commit))
-            and (latest_commit_date - current_commit_date).days <= allowed_delay_days
+            and (date.today() - latest_commit_date).days <= allowed_delay_days
         )
     )
 
