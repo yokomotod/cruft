@@ -138,7 +138,7 @@ def test_check_allowed_delay_days(cruft_runner, cookiecutter_dir):
             "--project-dir",
             cookiecutter_dir.as_posix(),
             "--allowed-delay-days",
-            "1",
+            "36500",
             "--checkout",
             "updated",
         ]
